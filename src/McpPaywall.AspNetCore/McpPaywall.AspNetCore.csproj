@@ -1,0 +1,38 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    
+    <!-- Package Information -->
+    <PackageId>McpPaywall.AspNetCore</PackageId>
+    <Version>1.0.0</Version>
+    <Authors>Stefan Merkel</Authors>
+    <Company>slekrem</Company>
+    <Description>ASP.NET Core paywall middleware for Model Context Protocol (MCP) servers with Cashu eCash integration</Description>
+    <PackageTags>MCP;ModelContextProtocol;Paywall;Cashu;Lightning;Payment;AspNetCore;Middleware</PackageTags>
+    <PackageProjectUrl>https://github.com/slekrem/McpPaywall</PackageProjectUrl>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <RepositoryUrl>https://github.com/slekrem/McpPaywall</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    
+    <!-- Build Configuration -->
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <WarningsAsErrors />
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <FrameworkReference Include="Microsoft.AspNetCore.App" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="9.0.7" />
+    <PackageReference Include="DotNut" Version="1.0.5" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="../../README.md" Pack="true" PackagePath="\" />
+  </ItemGroup>
+
+</Project>
