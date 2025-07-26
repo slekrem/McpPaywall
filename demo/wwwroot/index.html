@@ -1,0 +1,673 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>McpPaywall Demo</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        .hero-section {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 80px 0;
+        }
+
+        .feature-card {
+            transition: transform 0.3s ease;
+            border: none;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .code-block {
+            background-color: #2d3748;
+            color: #e2e8f0;
+            padding: 20px;
+            border-radius: 8px;
+            overflow-x: auto;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+
+        .demo-section {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+        }
+
+        .step-card {
+            border: none;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .step-card.active {
+            border: 2px solid #007bff;
+            box-shadow: 0 4px 8px rgba(0, 123, 255, 0.2);
+        }
+
+        .step-number {
+            background: #007bff;
+            color: white;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+
+        .tool-demo {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .payment-status {
+            padding: 10px;
+            border-radius: 5px;
+            margin: 10px 0;
+        }
+
+        .status-pending {
+            background-color: #fff3cd;
+            color: #856404;
+        }
+
+        .status-paid {
+            background-color: #d1edff;
+            color: #0c5460;
+        }
+
+        .status-error {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+
+        .qr-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 200px;
+            background: #f8f9fa;
+            border-radius: 8px;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
+        <div class="container">
+            <a class="navbar-brand" href="#">
+                <i class="fas fa-shield-alt me-2"></i>
+                McpPaywall Demo
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#features">Features</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#demo">Live Demo</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#tools">Tools</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero-section">
+        <div class="container text-center">
+            <h1 class="display-4 fw-bold mb-4">
+                <i class="fas fa-lock me-3"></i>
+                McpPaywall Demo
+            </h1>
+            <p class="lead mb-5">
+                Experience privacy-preserving payments for MCP servers with Cashu eCash.
+                Pay just 10 satoshis to access premium tools for 24 hours.
+            </p>
+            <div class="alert alert-warning d-inline-block">
+                <i class="fas fa-info-circle me-2"></i>
+                <strong>Demo Notice:</strong> This demo uses real Lightning payments (10 sats)
+            </div>
+            <div class="d-flex justify-content-center gap-3 mt-4">
+                <a href="#demo" class="btn btn-light btn-lg">
+                    <i class="fas fa-play me-2"></i>Try Demo
+                </a>
+                <a href="https://github.com/slekrem/McpPaywall" class="btn btn-outline-light btn-lg">
+                    <i class="fab fa-github me-2"></i>View Source
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="py-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-12 text-center mb-5">
+                    <h2 class="display-5 fw-bold">Why McpPaywall?</h2>
+                    <p class="lead text-muted">Monetize your MCP servers with micropayments</p>
+                </div>
+            </div>
+            <div class="row g-4">
+                <div class="col-md-6 col-lg-3">
+                    <div class="card feature-card h-100">
+                        <div class="card-body text-center">
+                            <i class="fas fa-bolt fa-3x text-warning mb-3"></i>
+                            <h5 class="card-title">Lightning Fast</h5>
+                            <p class="card-text">Instant payments via Lightning Network with Cashu eCash privacy.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-3">
+                    <div class="card feature-card h-100">
+                        <div class="card-body text-center">
+                            <i class="fas fa-shield-alt fa-3x text-success mb-3"></i>
+                            <h5 class="card-title">Automatic Protection</h5>
+                            <p class="card-text">ASP.NET Core middleware automatically protects your MCP endpoints.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-3">
+                    <div class="card feature-card h-100">
+                        <div class="card-body text-center">
+                            <i class="fas fa-coins fa-3x text-primary mb-3"></i>
+                            <h5 class="card-title">Micropayments</h5>
+                            <p class="card-text">Enable pay-per-use pricing with minimal transaction costs.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-3">
+                    <div class="card feature-card h-100">
+                        <div class="card-body text-center">
+                            <i class="fas fa-user-secret fa-3x text-info mb-3"></i>
+                            <h5 class="card-title">Privacy First</h5>
+                            <p class="card-text">Cashu eCash ensures private, anonymous payments.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Live Demo Section -->
+    <section id="demo" class="py-5 demo-section">
+        <div class="container">
+            <div class="row">
+                <div class="col-12 text-center mb-5">
+                    <h2 class="display-5 fw-bold">🎮 Interactive Demo</h2>
+                    <p class="lead text-muted">Experience the complete payment flow</p>
+                </div>
+            </div>
+
+            <!-- Step 1: Access Attempt -->
+            <div class="row mb-4">
+                <div class="col-12">
+                    <div class="card step-card" id="step1-card">
+                        <div class="card-body">
+                            <div class="row align-items-center">
+                                <div class="col-md-2 text-center">
+                                    <div class="step-number">1</div>
+                                    <small class="text-muted">Try Access</small>
+                                </div>
+                                <div class="col-md-6">
+                                    <h5>Try accessing MCP tools without payment</h5>
+                                    <p class="text-muted mb-2">See how the paywall blocks unauthorized access</p>
+                                    <button id="try-access-btn" class="btn btn-outline-primary">
+                                        <i class="fas fa-play me-2"></i>Try Access MCP Tools
+                                    </button>
+                                </div>
+                                <div class="col-md-4">
+                                    <div id="step1-result" class="payment-status status-pending" style="display: none;">
+                                        <i class="fas fa-info-circle me-2"></i>
+                                        <span id="step1-message">Click to try accessing tools</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Step 2: Create Payment -->
+            <div class="row mb-4">
+                <div class="col-12">
+                    <div class="card step-card" id="step2-card">
+                        <div class="card-body">
+                            <div class="row align-items-center">
+                                <div class="col-md-2 text-center">
+                                    <div class="step-number">2</div>
+                                    <small class="text-muted">Create Invoice</small>
+                                </div>
+                                <div class="col-md-6">
+                                    <h5>Create Lightning payment invoice</h5>
+                                    <p class="text-muted mb-2">Generate invoice for 10 satoshis (24h access)</p>
+                                    <button id="create-invoice-btn" class="btn btn-outline-success" disabled>
+                                        <i class="fas fa-file-invoice me-2"></i>Create Invoice (10 sats)
+                                    </button>
+                                </div>
+                                <div class="col-md-4">
+                                    <div id="step2-result" class="payment-status status-pending" style="display: none;">
+                                        <i class="fas fa-clock me-2"></i>
+                                        <span id="step2-message">Complete step 1 first</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Step 3: Payment -->
+            <div class="row mb-4">
+                <div class="col-12">
+                    <div class="card step-card" id="step3-card">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-2 text-center">
+                                    <div class="step-number">3</div>
+                                    <small class="text-muted">Pay Invoice</small>
+                                </div>
+                                <div class="col-md-10">
+                                    <h5>Pay the Lightning invoice</h5>
+                                    <div id="payment-details" style="display: none;">
+                                        <div class="row">
+                                            <div class="col-md-8">
+                                                <p class="text-muted">Pay this invoice with your Cashu wallet:</p>
+                                                <div class="input-group mb-3">
+                                                    <input type="text" id="invoice-display"
+                                                        class="form-control font-monospace small" readonly
+                                                        placeholder="Lightning invoice will appear here...">
+                                                    <button class="btn btn-outline-secondary" type="button"
+                                                        onclick="copyInvoice()" id="copy-btn">
+                                                        <i class="fas fa-copy"></i>
+                                                    </button>
+                                                </div>
+                                                <small class="text-muted">
+                                                    <i class="fas fa-info-circle me-1"></i>
+                                                    Recommended wallets: <a href="https://minibits.cash"
+                                                        target="_blank">Minibits</a>,
+                                                    <a href="https://cashu.me" target="_blank">Cashu.me</a>,
+                                                    <a href="https://enuts.cash" target="_blank">eNuts</a>
+                                                </small>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <div class="qr-container">
+                                                    <div id="qr-code">
+                                                        <i class="fas fa-qrcode fa-3x text-muted"></i>
+                                                        <p class="text-muted mt-2">QR Code</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="text-center mt-3">
+                                            <button id="check-payment-btn" class="btn btn-success"
+                                                onclick="checkPayment()" disabled>
+                                                <i class="fas fa-search me-2"></i>Check Payment Status
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div id="step3-result" class="payment-status status-pending">
+                                        <i class="fas fa-clock me-2"></i>
+                                        <span id="step3-message">Complete step 2 first</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Step 4: Access Tools -->
+            <div class="row mb-4">
+                <div class="col-12">
+                    <div class="card step-card" id="step4-card">
+                        <div class="card-body">
+                            <div class="row align-items-center">
+                                <div class="col-md-2 text-center">
+                                    <div class="step-number">4</div>
+                                    <small class="text-muted">Use Tools</small>
+                                </div>
+                                <div class="col-md-6">
+                                    <h5>Access premium MCP tools</h5>
+                                    <p class="text-muted mb-2">Use your access token to call protected tools</p>
+                                    <div id="access-tools-section" style="display: none;">
+                                        <div class="btn-group-vertical w-100" role="group">
+                                            <button class="btn btn-outline-primary"
+                                                onclick="testTool('GetCashuMintInfo')">
+                                                <i class="fas fa-info-circle me-2"></i>Get Mint Info
+                                            </button>
+                                            <button class="btn btn-outline-primary" onclick="testTool('GetWeather')">
+                                                <i class="fas fa-cloud me-2"></i>Get Weather
+                                            </button>
+                                            <button class="btn btn-outline-primary"
+                                                onclick="testTool('GetInspirationalQuote')">
+                                                <i class="fas fa-quote-left me-2"></i>Get Quote
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div id="step4-result" class="payment-status status-pending">
+                                        <i class="fas fa-clock me-2"></i>
+                                        <span id="step4-message">Complete payment first</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Tool Results Section -->
+    <section id="tools" class="py-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <h3><i class="fas fa-terminal me-2"></i>Tool Results</h3>
+                    <div id="tool-results" class="tool-demo">
+                        <p class="text-muted text-center">
+                            <i class="fas fa-info-circle me-2"></i>
+                            Tool results will appear here after payment and tool usage
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-light py-4">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+                    <h5><i class="fas fa-shield-alt me-2"></i>McpPaywall Demo</h5>
+                    <p class="mb-0">Privacy-preserving payments for MCP servers</p>
+                </div>
+                <div class="col-md-6 text-md-end">
+                    <p class="mb-0">
+                        <a href="https://github.com/slekrem/McpPaywall" class="text-light me-3">
+                            <i class="fab fa-github me-1"></i>GitHub
+                        </a>
+                        <a href="https://cashu.space" class="text-light">
+                            <i class="fas fa-external-link-alt me-1"></i>Cashu Protocol
+                        </a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.min.js"></script>
+    <script>
+        let currentQuoteId = null;
+        let currentAccessToken = null;
+        let paymentCheckInterval = null;
+
+        // Step 1: Try accessing MCP tools
+        document.getElementById('try-access-btn').addEventListener('click', async () => {
+            const btn = document.getElementById('try-access-btn');
+            const result = document.getElementById('step1-result');
+            const message = document.getElementById('step1-message');
+            const card = document.getElementById('step1-card');
+
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Trying...';
+
+            try {
+                const response = await fetch('/demo/mcp/sse', {
+                    method: 'GET'
+                });
+
+                if (response.status === 401) {
+                    // Expected: paywall blocks access
+                    message.textContent = '🚫 Access denied - Payment required!';
+                    result.className = 'payment-status status-error';
+                    result.style.display = 'block';
+                    card.classList.add('active');
+
+                    // Enable step 2
+                    document.getElementById('create-invoice-btn').disabled = false;
+                    document.getElementById('step2-card').classList.add('active');
+                    document.getElementById('step2-message').textContent = 'Ready to create invoice';
+                } else {
+                    message.textContent = 'Unexpected response: ' + response.status;
+                    result.className = 'payment-status status-error';
+                    result.style.display = 'block';
+                }
+            } catch (error) {
+                message.textContent = 'Network error: ' + error.message;
+                result.className = 'payment-status status-error';
+                result.style.display = 'block';
+            }
+
+            btn.disabled = false;
+            btn.innerHTML = '<i class="fas fa-play me-2"></i>Try Access MCP Tools';
+        });
+
+        // Step 2: Create invoice
+        document.getElementById('create-invoice-btn').addEventListener('click', async () => {
+            const btn = document.getElementById('create-invoice-btn');
+            const result = document.getElementById('step2-result');
+            const message = document.getElementById('step2-message');
+
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Creating...';
+
+            try {
+                const response = await fetch('/demo/Paywall/create-invoice', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        amount: 10,
+                        unit: 'sat',
+                        description: 'McpPaywall Demo Access'
+                    })
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    currentQuoteId = data.quote;
+
+                    // Show payment details
+                    document.getElementById('payment-details').style.display = 'block';
+                    document.getElementById('invoice-display').value = data.request;
+
+                    // Generate QR code
+                    const qr = qrcode(0, 'M');
+                    qr.addData(data.request);
+                    qr.make();
+                    document.getElementById('qr-code').innerHTML = qr.createImgTag(4, 8);
+
+                    // Enable payment check
+                    document.getElementById('check-payment-btn').disabled = false;
+
+                    message.textContent = '✅ Invoice created successfully!';
+                    result.className = 'payment-status status-paid';
+                    result.style.display = 'block';
+
+                    // Update step 3
+                    document.getElementById('step3-card').classList.add('active');
+                    document.getElementById('step3-message').textContent = 'Pay the invoice above';
+
+                    // Start auto-checking payment
+                    startPaymentPolling();
+
+                } else {
+                    message.textContent = 'Error: ' + (data.error || 'Failed to create invoice');
+                    result.className = 'payment-status status-error';
+                    result.style.display = 'block';
+                }
+            } catch (error) {
+                message.textContent = 'Network error: ' + error.message;
+                result.className = 'payment-status status-error';
+                result.style.display = 'block';
+            }
+
+            btn.disabled = false;
+            btn.innerHTML = '<i class="fas fa-file-invoice me-2"></i>Create Invoice (10 sats)';
+        });
+
+        async function checkPayment() {
+            if (!currentQuoteId) return;
+
+            const btn = document.getElementById('check-payment-btn');
+            const result = document.getElementById('step3-result');
+            const message = document.getElementById('step3-message');
+
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Checking...';
+
+            try {
+                const response = await fetch(`/demo/Paywall/check-payment/${currentQuoteId}`);
+                const data = await response.json();
+
+                if (response.ok) {
+                    if (data.paid) {
+                        // Payment successful!
+                        currentAccessToken = data.accessToken;
+
+                        // Stop polling
+                        if (paymentCheckInterval) {
+                            clearInterval(paymentCheckInterval);
+                        }
+
+                        message.textContent = '🎉 Payment successful! Access granted!';
+                        result.className = 'payment-status status-paid';
+
+                        // Enable step 4
+                        document.getElementById('step4-card').classList.add('active');
+                        document.getElementById('step4-message').textContent = 'Tools now available!';
+                        document.getElementById('access-tools-section').style.display = 'block';
+
+                    } else {
+                        message.textContent = '⏳ Payment pending... Please pay the invoice';
+                        result.className = 'payment-status status-pending';
+                    }
+                } else {
+                    message.textContent = 'Error: ' + (data.error || 'Check failed');
+                    result.className = 'payment-status status-error';
+                }
+            } catch (error) {
+                message.textContent = 'Network error: ' + error.message;
+                result.className = 'payment-status status-error';
+            }
+
+            btn.disabled = false;
+            btn.innerHTML = '<i class="fas fa-search me-2"></i>Check Payment Status';
+        }
+
+        async function testTool(toolName) {
+            if (!currentAccessToken) {
+                alert('No access token available. Please complete payment first.');
+                return;
+            }
+
+            const resultsDiv = document.getElementById('tool-results');
+            resultsDiv.innerHTML = '<div class="text-center"><i class="fas fa-spinner fa-spin"></i> Calling ' + toolName + '...</div>';
+
+            let params = {};
+
+            // Set parameters based on tool
+            if (toolName === 'GetCashuMintInfo') {
+                params.mintUrl = 'https://mint.minibits.cash/Bitcoin';
+            } else if (toolName === 'GetWeather') {
+                params.city = 'Berlin';
+            }
+
+            try {
+                const response = await fetch(`/demo/mcp?accessToken=${currentAccessToken}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        jsonrpc: '2.0',
+                        id: 1,
+                        method: 'tools/call',
+                        params: {
+                            name: toolName,
+                            arguments: params
+                        }
+                    })
+                });
+
+                const data = await response.json();
+
+                if (response.ok && data.result) {
+                    const result = typeof data.result === 'string' ? JSON.parse(data.result) : data.result;
+                    resultsDiv.innerHTML = `
+                        <h5><i class="fas fa-check-circle text-success me-2"></i>${toolName} Result</h5>
+                        <div class="code-block">${JSON.stringify(result, null, 2)}</div>
+                    `;
+                } else {
+                    resultsDiv.innerHTML = `
+                        <h5><i class="fas fa-exclamation-triangle text-warning me-2"></i>Tool Error</h5>
+                        <div class="alert alert-warning">
+                            ${data.error || 'Tool call failed'}
+                        </div>
+                    `;
+                }
+            } catch (error) {
+                resultsDiv.innerHTML = `
+                    <h5><i class="fas fa-times-circle text-danger me-2"></i>Network Error</h5>
+                    <div class="alert alert-danger">
+                        ${error.message}
+                    </div>
+                `;
+            }
+        }
+
+        function startPaymentPolling() {
+            paymentCheckInterval = setInterval(async () => {
+                await checkPayment();
+            }, 5000); // Check every 5 seconds
+        }
+
+        function copyInvoice() {
+            const invoice = document.getElementById('invoice-display').value;
+            navigator.clipboard.writeText(invoice).then(() => {
+                const btn = document.getElementById('copy-btn');
+                const originalContent = btn.innerHTML;
+                btn.innerHTML = '<i class="fas fa-check"></i>';
+                btn.classList.remove('btn-outline-secondary');
+                btn.classList.add('btn-success');
+                setTimeout(() => {
+                    btn.innerHTML = originalContent;
+                    btn.classList.remove('btn-success');
+                    btn.classList.add('btn-outline-secondary');
+                }, 1000);
+            });
+        }
+
+        // Clean up interval on page unload
+        window.addEventListener('beforeunload', () => {
+            if (paymentCheckInterval) {
+                clearInterval(paymentCheckInterval);
+            }
+        });
+    </script>
+</body>
+
+</html>
