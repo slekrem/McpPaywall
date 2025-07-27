@@ -91,7 +91,7 @@ public class CashuPaymentProvider : IPaymentProvider
         }
     }
 
-    public async Task<ClaimTokenResult?> ClaimTokenAsync(string quoteId, decimal amount)
+    public async Task<ClaimTokenResult?> ClaimTokenAsync(string quoteId, decimal amount, string unit)
     {
         if (!_options.StoreTokens)
             return null;
@@ -103,7 +103,8 @@ public class CashuPaymentProvider : IPaymentProvider
 
             // Get keysets and generate blinded outputs
             var keysets = await cashuClient.GetKeysets();
-            var keyset = keysets.Keysets.First(k => k.Active);
+            var keyset = keysets.Keysets.FirstOrDefault(k => k.Active && k.Unit == unit)
+                ?? keysets.Keysets.First(k => k.Active);
             var keys = await cashuClient.GetKeys(keyset.Id);
             var standardAmounts = keys.Keysets.First().Keys.Select(x => x.Key).ToArray();
 
@@ -188,7 +189,7 @@ public class CashuPaymentProvider : IPaymentProvider
             var cashuToken = new CashuToken
             {
                 Tokens = [token],
-                Unit = "usd", // TODO: Use actual unit
+                Unit = unit,
                 Memo = "MCP Paywall Token"
             };
 

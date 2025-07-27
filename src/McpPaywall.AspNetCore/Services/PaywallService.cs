@@ -115,7 +115,7 @@ public class PaywallService : IPaywallService
         if (statusResult.Status == PaymentStatus.Paid)
         {
             // Claim token if provider supports it
-            var claimResult = await _paymentProvider.ClaimTokenAsync(quoteId, paymentRecord.Amount);
+            var claimResult = await _paymentProvider.ClaimTokenAsync(quoteId, paymentRecord.Amount, paymentRecord.Unit);
 
             // Update payment record
             paymentRecord.IsPaid = true;

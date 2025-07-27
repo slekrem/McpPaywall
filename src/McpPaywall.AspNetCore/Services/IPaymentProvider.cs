@@ -117,6 +117,7 @@ public interface IPaymentProvider
     /// </summary>
     /// <param name="quoteId">Quote/payment identifier</param>
     /// <param name="amount">Payment amount</param>
+    /// <param name="unit">Payment unit</param>
     /// <returns>Claim result</returns>
-    Task<ClaimTokenResult?> ClaimTokenAsync(string quoteId, decimal amount);
+    Task<ClaimTokenResult?> ClaimTokenAsync(string quoteId, decimal amount, string unit);
 }
