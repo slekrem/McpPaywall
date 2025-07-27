@@ -29,7 +29,7 @@ builder.Services.AddMcpPaywallWithCashu(
 
         // Endpoint configuration
         options.McpPath = "/mcp/sse";        // MCP endpoint path
-        options.BasePath = "/demo/paywall";   // Paywall API base path
+        options.BasePath = "/paywall";       // Paywall API base path
 
         // UI customization
         options.Title = "McpPaywall Demo - Premium MCP Tools";
@@ -49,7 +49,7 @@ builder.Services.AddMcpPaywallWithCashu(
 builder.Services
     .AddMcpServer()
     .WithHttpTransport()
-    .WithStdioServerTransport()
+    //.WithStdioServerTransport()
     .WithResourcesFromAssembly()
     .WithPromptsFromAssembly()
     .WithToolsFromAssembly();
@@ -60,7 +60,7 @@ builder.Services.AddHttpClient();
 var app = builder.Build();
 
 // Configure middleware pipeline
-app.UsePathBase("/demo")
+app.UsePathBase("/paywall")
    .UseDefaultFiles()
    .UseStaticFiles()
    .UseMcpPaywall()
@@ -69,13 +69,6 @@ app.UsePathBase("/demo")
 // Map endpoints
 app.MapControllers();
 app.MapMcp("/mcp");
-
-// Start the application
-Console.WriteLine("=== McpPaywall Demo Server ===");
-Console.WriteLine("Paywall UI: http://localhost:5000/demo/paywall");
-Console.WriteLine("MCP Endpoint: http://localhost:5000/demo/mcp (requires payment)");
-Console.WriteLine("Payment: 10 sats via Cashu eCash");
-Console.WriteLine();
 
 await app.RunAsync();
 

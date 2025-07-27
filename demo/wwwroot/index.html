@@ -433,7 +433,7 @@
             btn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Trying...';
 
             try {
-                const response = await fetch('/demo/mcp/sse', {
+                const response = await fetch('/paywall/mcp/sse', {
                     method: 'GET'
                 });
 
@@ -473,7 +473,7 @@
             btn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Creating...';
 
             try {
-                const response = await fetch('/demo/Paywall/create-invoice', {
+                const response = await fetch('/paywall/paywall/create-invoice', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -540,7 +540,7 @@
             btn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Checking...';
 
             try {
-                const response = await fetch(`/demo/Paywall/check-payment/${currentQuoteId}`);
+                const response = await fetch(`/paywall/paywall/check-payment/${currentQuoteId}`);
                 const data = await response.json();
 
                 if (response.ok) {
@@ -597,7 +597,7 @@
             }
 
             try {
-                const response = await fetch(`/demo/mcp?accessToken=${currentAccessToken}`, {
+                const response = await fetch(`/paywall/mcp?accessToken=${currentAccessToken}`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
