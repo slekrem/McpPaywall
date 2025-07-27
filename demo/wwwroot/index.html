@@ -347,6 +347,24 @@
                                     <h5>Access premium MCP resources</h5>
                                     <p class="text-muted mb-2">Explore all available tools, prompts, and resources</p>
                                     <div id="access-tools-section" style="display: none;">
+                                        <!-- MCP Connection URL -->
+                                        <div class="row mb-4">
+                                            <div class="col-12">
+                                                <h6><i class="fas fa-link me-2"></i>MCP Connection URL</h6>
+                                                <p class="text-muted small mb-2">Copy this URL to connect your AI client directly to the MCP server:</p>
+                                                <div class="input-group mb-2">
+                                                    <input type="text" id="mcp-connection-url" class="form-control font-monospace small" readonly>
+                                                    <button class="btn btn-outline-primary" type="button" onclick="copyMcpUrl()" id="copy-mcp-btn">
+                                                        <i class="fas fa-copy"></i> Copy URL
+                                                    </button>
+                                                </div>
+                                                <small class="text-muted">
+                                                    <i class="fas fa-info-circle me-1"></i>
+                                                    Use this URL in Claude Desktop, Continue.dev, or other MCP-compatible AI clients
+                                                </small>
+                                            </div>
+                                        </div>
+                                        
                                         <div class="row">
                                             <div class="col-12 mb-3">
                                                 <button class="btn btn-info" onclick="loadMcpCapabilities()">
@@ -463,6 +481,11 @@
             const urlToken = getUrlParameter('accessToken');
             if (urlToken) {
                 currentAccessToken = urlToken;
+                
+                // Generate MCP connection URL
+                const mcpUrl = `${window.location.origin}/paywall/mcp/sse?accessToken=${currentAccessToken}`;
+                document.getElementById('mcp-connection-url').value = mcpUrl;
+                
                 // Skip to step 4 - show tools are available
                 document.getElementById('step4-card').classList.add('active');
                 document.getElementById('step4-message').textContent = 'Tools available (token from URL)';
@@ -611,6 +634,10 @@
 
                         message.textContent = '🎉 Payment successful! Access granted!';
                         result.className = 'payment-status status-paid';
+
+                        // Generate MCP connection URL
+                        const mcpUrl = `${window.location.origin}/paywall/mcp/sse?accessToken=${currentAccessToken}`;
+                        document.getElementById('mcp-connection-url').value = mcpUrl;
 
                         // Enable step 4
                         document.getElementById('step4-card').classList.add('active');
@@ -1009,6 +1036,25 @@
                     btn.classList.remove('btn-success');
                     btn.classList.add('btn-outline-secondary');
                 }, 1000);
+            });
+        }
+
+        function copyMcpUrl() {
+            const mcpUrl = document.getElementById('mcp-connection-url').value;
+            navigator.clipboard.writeText(mcpUrl).then(() => {
+                const btn = document.getElementById('copy-mcp-btn');
+                const originalContent = btn.innerHTML;
+                btn.innerHTML = '<i class="fas fa-check"></i> Copied!';
+                btn.classList.remove('btn-outline-primary');
+                btn.classList.add('btn-success');
+                setTimeout(() => {
+                    btn.innerHTML = originalContent;
+                    btn.classList.remove('btn-success');
+                    btn.classList.add('btn-outline-primary');
+                }, 2000);
+            }).catch(err => {
+                console.error('Failed to copy MCP URL:', err);
+                alert('Failed to copy URL to clipboard');
             });
         }
 
