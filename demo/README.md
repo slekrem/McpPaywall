@@ -1,251 +1,227 @@
-# McpPaywall Demo
+# 🎮 McpPaywall Interactive Demo
 
-This demo project showcases the McpPaywall middleware in action, demonstrating how to protect MCP (Model Context Protocol) server tools with Cashu eCash micropayments.
+**Live Demo**: [sup3r.cool/paywall](https://sup3r.cool/paywall)
 
-## Overview
+Experience the complete McpPaywall payment flow with real Lightning Network payments and Cashu eCash privacy.
 
-The demo creates an MCP server with premium tools that require a small payment (10 satoshis) to access. Users pay via Lightning Network using Cashu eCash for privacy-preserving payments.
+## 🌟 What This Demo Shows
 
-## Features Demonstrated
+### 4-Step Interactive Experience:
 
-### 🔐 Paywall Protection
-- ASP.NET Core middleware automatically protects MCP endpoints
-- Payment verification through Cashu eCash protocol
-- Access token generation and validation
-- Session management with configurable expiration
+1. **🚫 Access Attempt** - Try accessing MCP tools without payment
+2. **💳 Create Invoice** - Generate Lightning payment invoice (10 sats)
+3. **⚡ Pay with Cashu** - Use eCash wallet for private payment
+4. **🛠️ Use Premium Tools** - Access paid MCP resources
 
-### 🛠️ Premium MCP Tools
-The demo includes several protected MCP tools:
+### Demo Features:
 
-1. **GetCashuMintInfo(mintUrl)** - Comprehensive Cashu mint information
-2. **GetCashuKeysets(mintUrl)** - Available keysets and fee structures  
-3. **CreateMintQuote(mintUrl, amount, unit)** - Generate Lightning invoices
-4. **GetWeather(city)** - Current weather information (simulated)
-5. **GetInspirationalQuote()** - Random motivational quotes
+- **Real Lightning Payments** (10 satoshis ≈ $0.003)
+- **Cashu eCash Privacy** (anonymous, unlinkable payments)
+- **QR Code Support** (scan with mobile wallets)
+- **Auto Payment Detection** (5-second polling)
+- **MCP Connection URL** (copy for AI clients)
+- **Interactive Tool Testing** (weather, passwords, etc.)
 
-### 💰 Payment Flow
-1. User attempts to access MCP tools without payment
-2. Middleware returns 401 with paywall information
-3. User creates payment invoice via paywall API
-4. Payment is made through Cashu wallet (Lightning Network)
-5. System verifies payment and generates access token
-6. User accesses protected tools using token
+## 🛠️ Available MCP Resources
 
-## Quick Start
+After payment, explore these premium tools:
 
-### Prerequisites
-- .NET 9.0 SDK
-- A Cashu wallet (e.g., [Minibits](https://www.minibits.cash/))
-- Some satoshis for testing payments
+### Tools
+- **GetWeather** - Simulated weather data for any city
+- **GeneratePassword** - Secure password generation (customizable length)
+- **CalculateHash** - SHA256 hash calculation for text input
 
-### Running the Demo
+### Prompts  
+- **EmailTemplate** - Professional email template generation
+- **MeetingAgenda** - Structured meeting agenda creation
 
-1. **Clone and build:**
-   ```bash
-   cd /path/to/McpPaywall/demo
-   dotnet restore
-   dotnet build
-   ```
+### Resources
+- **ProductivityTips** - Curated productivity advice
+- **DevTools** - Essential development tool recommendations
 
-2. **Start the server:**
-   ```bash
-   dotnet run
-   ```
+## 💳 Supported Wallets
 
-3. **Access the demo:**
-   - Web Interface: http://localhost:5000/demo
-   - Paywall API: http://localhost:5000/demo/paywall
-   - MCP Endpoint: http://localhost:5000/demo/mcp (requires payment)
+Pay the Lightning invoice with any Cashu-compatible wallet:
 
-### Testing the Payment Flow
+- **[Minibits](https://minibits.cash)** - Mobile Cashu wallet (iOS/Android)
+- **[Cashu.me](https://cashu.me)** - Web-based Cashu wallet
+- **[eNuts](https://enuts.cash)** - Cross-platform Cashu wallet
+- **Any Lightning wallet** - Standard Lightning Network support
 
-1. **Open the paywall interface:**
-   ```
-   http://localhost:5000/demo/paywall
-   ```
+## 🔗 AI Client Integration
 
-2. **Create an invoice:**
-   ```bash
-   curl -X POST http://localhost:5000/demo/paywall/create-invoice \
-     -H "Content-Type: application/json" \
-     -d '{"amount": 10, "unit": "sat", "provider": "cashu"}'
-   ```
+After payment, you'll get an MCP connection URL like:
 
-3. **Check payment status:**
-   ```bash
-   curl http://localhost:5000/demo/paywall/check-payment/{quoteId}
-   ```
-
-4. **Use MCP tools with access token:**
-   ```bash
-   curl "http://localhost:5000/demo/mcp?accessToken={your-token}"
-   ```
-
-## Configuration
-
-The demo is configured in `Program.cs` with the following settings:
-
-```csharp
-// Payment Configuration
-options.DefaultAmount = 10;           // 10 satoshis
-options.DefaultUnit = "sat";
-options.TokenValidityDays = 1;        // 24 hour access
-
-// Endpoints
-options.McpPath = "/demo/mcp";        // Protected MCP endpoint
-options.BasePath = "/demo/paywall";   // Payment API
-
-// Cashu Integration
-cashuOptions.MintUrl = "https://mint.minibits.cash/Bitcoin";
-cashuOptions.StoreTokens = true;
+```
+https://sup3r.cool/paywall/mcp/sse?accessToken=abc123...
 ```
 
-## API Endpoints
+### Use with:
+- **Claude Desktop** - Add to MCP settings
+- **Continue.dev** - Configure as MCP server
+- **Any MCP Client** - Standard Model Context Protocol
 
-### Paywall API (Public)
-- `POST /demo/paywall/create-invoice` - Create payment invoice
-- `GET /demo/paywall/check-payment/{quoteId}` - Check payment status  
-- `GET /demo/paywall/validate-token?token={token}` - Validate access token
-- `GET /demo/paywall/statistics` - Payment statistics (admin)
-- `POST /demo/paywall/cleanup` - Clean expired records (admin)
+## 🏃‍♂️ Run Demo Locally
 
-### MCP Tools (Protected)
-- `GET /demo/mcp?accessToken={token}` - MCP server endpoint
+### Prerequisites:
+- .NET 8.0 or later
+- Git
 
-All MCP tools require a valid access token obtained through payment.
+### Steps:
 
-## Database
+```bash
+# Clone the repository
+git clone https://github.com/slekrem/McpPaywall.git
+cd McpPaywall/demo
 
-The demo uses SQLite with the database file `demo-paywall.db` created automatically. The database tracks:
+# Run the demo
+dotnet run
 
-- Payment records and quotes
-- Access tokens and expiration
-- User sessions and usage
+# Visit in browser
+open http://localhost:5001/paywall
+```
 
-## Development
+### Local Configuration:
 
-### Adding New Tools
+The demo uses these settings:
+- **Amount**: 10 satoshis (≈ $0.003)
+- **Validity**: 24 hours
+- **Cashu Mint**: `https://stablenut.cashu.network`
+- **Database**: SQLite (`demo-paywall.db`)
 
-Create new MCP tools by adding methods to the `DemoTools` class:
+## 🔧 Demo Architecture
 
-```csharp
-[McpServerTool, Description("Your tool description")]
-public static async Task<string> YourNewTool(string parameter,
-    [FromServices] IHttpContextAccessor httpContextAccessor)
+```
+┌─────────────────┐    ┌──────────────────┐    ┌─────────────────┐
+│   Web Browser   │───▶│   Demo Server    │───▶│   MCP Tools     │
+│  (Interactive)  │    │ (ASP.NET Core)   │    │ (After Payment) │
+└─────────────────┘    └──────────────────┘    └─────────────────┘
+                              │
+                              ▼
+                       ┌──────────────────┐
+                       │  Cashu Mint      │
+                       │  (stablenut)     │
+                       └──────────────────┘
+```
+
+### Key Components:
+
+- **Frontend**: Bootstrap 5 + Vanilla JavaScript
+- **Backend**: ASP.NET Core with McpPaywall middleware
+- **Payments**: Cashu eCash via DotNut library
+- **Database**: SQLite for payment records
+- **MCP Server**: Model Context Protocol implementation
+
+## 📊 Demo Analytics
+
+The demo tracks:
+- Payment attempts & successes
+- Tool usage statistics  
+- User access patterns
+- Performance metrics
+
+## 🛡️ Security Features
+
+- **Token Validation** - Secure access tokens with expiration
+- **Rate Limiting** - Prevents abuse of payment endpoints
+- **HTTPS Only** - All payments over encrypted connections
+- **Privacy First** - Cashu eCash ensures payment anonymity
+
+## 🎯 Business Model Examples
+
+This demo showcases various monetization strategies:
+
+### Pay-per-Use
+- Weather API calls
+- Password generation
+- Hash calculations
+
+### Time-based Access
+- 24-hour tool access
+- Daily/weekly subscriptions
+- Premium feature unlocking
+
+### Content Gating
+- Productivity guides
+- Developer resources
+- Curated tool lists
+
+## 🔄 Demo Flow Details
+
+### Step 1: Access Attempt
+```http
+GET /paywall/mcp/sse
+Response: 401 Unauthorized
+```
+
+### Step 2: Create Invoice
+```http
+POST /paywall/paywall/create-invoice
 {
-    var context = httpContextAccessor.HttpContext;
-    var userId = context?.Items["McpPaywall.UserId"]?.ToString() ?? "unknown";
-    
-    // Your tool implementation
-    return JsonSerializer.Serialize(result);
+  "amount": 10,
+  "unit": "sat",
+  "description": "McpPaywall Demo Access"
 }
 ```
 
-### Customizing Payment Settings
-
-Modify the paywall configuration in `Program.cs`:
-
-```csharp
-builder.Services.AddMcpPaywallWithCashu(
-    options =>
-    {
-        options.DefaultAmount = 50;        // Change amount
-        options.DefaultUnit = "sat";       // Change unit
-        options.TokenValidityDays = 7;     // Change validity
-        options.Title = "Your Title";      // Customize UI
-        // ... other options
-    },
-    cashuOptions =>
-    {
-        cashuOptions.MintUrl = "your-mint-url";  // Use different mint
-        // ... other Cashu options
-    });
+### Step 3: Payment Check
+```http
+GET /paywall/paywall/check-payment/{quoteId}
+Response: {
+  "paid": true,
+  "accessToken": "eyJ0eXAiOiJKV1QiLCJ...",
+  "expiresAt": "2024-01-21T12:00:00Z"
+}
 ```
 
-## Testing with MCP Clients
-
-The demo works with any MCP client. Example using the MCP SDK:
-
-```csharp
-var client = new McpClient();
-await client.ConnectAsync("http://localhost:5000/demo/mcp?accessToken=your-token");
-
-var result = await client.CallToolAsync("GetWeather", new { city = "Berlin" });
-Console.WriteLine(result);
+### Step 4: MCP Access
+```http
+GET /paywall/mcp?accessToken=eyJ0eXAiOiJKV1Qi...
+Response: MCP capabilities and tools
 ```
 
-## Security Notes
+## 🆘 Troubleshooting
 
-- Access tokens expire after the configured period
-- Payment verification happens through Cashu mint
-- User sessions are tracked by IP address
-- Database automatically cleans up expired records
+### Common Issues:
 
-## Troubleshooting
+**Payment not detected?**
+- Wait 10-15 seconds for confirmation
+- Check wallet transaction history
+- Refresh payment status
 
-### Common Issues
+**MCP connection fails?**
+- Verify access token is valid
+- Check token expiration time
+- Ensure correct MCP endpoint URL
 
-1. **Payment not confirming:**
-   - Check Lightning invoice is actually paid
-   - Verify Cashu mint is accessible
-   - Check logs for payment processing errors
+**Demo won't load?**
+- Check internet connection
+- Verify .NET 8.0 is installed
+- Try different browser
 
-2. **Access token invalid:**
-   - Verify token hasn't expired
-   - Check database for payment record
-   - Ensure token is passed correctly in query string
+## 🤝 Contributing
 
-3. **MCP tools not working:**
-   - Confirm access token is valid
-   - Check middleware is properly configured
-   - Verify MCP endpoint path is correct
-
-### Logs
-
-The demo provides detailed logging. Check console output for:
-- Payment processing steps
-- Token validation results
-- Tool access attempts
-- Error messages
-
-## Production Considerations
-
-When using McpPaywall in production:
-
-1. **Security:**
-   - Use HTTPS for all endpoints
-   - Implement proper error handling
-   - Add rate limiting
-   - Secure database access
-
-2. **Monitoring:**
-   - Track payment success rates
-   - Monitor token usage patterns
-   - Log security events
-   - Set up alerts for failures
-
-3. **Performance:**
-   - Use connection pooling
-   - Implement caching where appropriate
-   - Optimize database queries
-   - Consider horizontal scaling
-
-4. **Compliance:**
-   - Ensure payment processing compliance
-   - Implement proper data retention
-   - Consider privacy regulations
-   - Document audit trails
-
-## Contributing
-
-This demo is part of the McpPaywall project. Contributions welcome:
+Want to improve the demo?
 
 1. Fork the repository
 2. Create feature branch
-3. Make changes
-4. Add tests
-5. Submit pull request
+3. Make your changes
+4. Submit pull request
 
-## License
+### Ideas for contributions:
+- Additional MCP tools
+- Payment provider integrations
+- UI/UX improvements
+- Performance optimizations
 
-This demo is licensed under the same terms as the McpPaywall project (MIT License).
+## 📞 Support
+
+- **Issues**: [GitHub Issues](https://github.com/slekrem/McpPaywall/issues)
+- **Discussions**: [GitHub Discussions](https://github.com/slekrem/McpPaywall/discussions)
+- **Discord**: [Cashu Community](https://discord.gg/cashu)
+
+---
+
+**🎉 Enjoy exploring the future of AI tool monetization with privacy-preserving payments!**
+
+[![Try Demo](https://img.shields.io/badge/🎮_Try_Live_Demo-sup3r.cool/paywall-blue?style=for-the-badge)](https://sup3r.cool/paywall)
