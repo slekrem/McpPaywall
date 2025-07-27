@@ -344,21 +344,39 @@
                                     <small class="text-muted">Use Tools</small>
                                 </div>
                                 <div class="col-md-6">
-                                    <h5>Access premium MCP tools</h5>
-                                    <p class="text-muted mb-2">Use your access token to call protected tools</p>
+                                    <h5>Access premium MCP resources</h5>
+                                    <p class="text-muted mb-2">Explore all available tools, prompts, and resources</p>
                                     <div id="access-tools-section" style="display: none;">
-                                        <div class="btn-group-vertical w-100" role="group">
-                                            <button class="btn btn-outline-primary"
-                                                onclick="testTool('GetCashuMintInfo')">
-                                                <i class="fas fa-info-circle me-2"></i>Get Mint Info
-                                            </button>
-                                            <button class="btn btn-outline-primary" onclick="testTool('GetWeather')">
-                                                <i class="fas fa-cloud me-2"></i>Get Weather
-                                            </button>
-                                            <button class="btn btn-outline-primary"
-                                                onclick="testTool('GetInspirationalQuote')">
-                                                <i class="fas fa-quote-left me-2"></i>Get Quote
-                                            </button>
+                                        <div class="row">
+                                            <div class="col-12 mb-3">
+                                                <button class="btn btn-info" onclick="loadMcpCapabilities()">
+                                                    <i class="fas fa-sync me-2"></i>Load Available Resources
+                                                </button>
+                                            </div>
+                                        </div>
+                                        
+                                        <!-- Tools Section -->
+                                        <div class="row mb-4" id="tools-section" style="display: none;">
+                                            <div class="col-12">
+                                                <h6><i class="fas fa-tools me-2"></i>Available Tools</h6>
+                                                <div id="tools-list" class="row"></div>
+                                            </div>
+                                        </div>
+                                        
+                                        <!-- Prompts Section -->
+                                        <div class="row mb-4" id="prompts-section" style="display: none;">
+                                            <div class="col-12">
+                                                <h6><i class="fas fa-comments me-2"></i>Available Prompts</h6>
+                                                <div id="prompts-list" class="row"></div>
+                                            </div>
+                                        </div>
+                                        
+                                        <!-- Resources Section -->
+                                        <div class="row mb-4" id="resources-section" style="display: none;">
+                                            <div class="col-12">
+                                                <h6><i class="fas fa-file-alt me-2"></i>Available Resources</h6>
+                                                <div id="resources-list" class="row"></div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -421,6 +439,41 @@
         let currentQuoteId = null;
         let currentAccessToken = null;
         let paymentCheckInterval = null;
+
+        // URL parameter handling
+        function getUrlParameter(name) {
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get(name);
+        }
+
+        function setUrlParameter(name, value) {
+            const url = new URL(window.location);
+            url.searchParams.set(name, value);
+            window.history.replaceState({}, '', url);
+        }
+
+        function removeUrlParameter(name) {
+            const url = new URL(window.location);
+            url.searchParams.delete(name);
+            window.history.replaceState({}, '', url);
+        }
+
+        // Initialize from URL parameter on page load
+        function initializeFromUrl() {
+            const urlToken = getUrlParameter('accessToken');
+            if (urlToken) {
+                currentAccessToken = urlToken;
+                // Skip to step 4 - show tools are available
+                document.getElementById('step4-card').classList.add('active');
+                document.getElementById('step4-message').textContent = 'Tools available (token from URL)';
+                document.getElementById('access-tools-section').style.display = 'block';
+                
+                // Update step 3 to show already paid
+                document.getElementById('step3-result').className = 'payment-status status-paid';
+                document.getElementById('step3-result').style.display = 'block';
+                document.getElementById('step3-message').textContent = '✅ Already paid (token from URL)';
+            }
+        }
 
         // Step 1: Try accessing MCP tools
         document.getElementById('try-access-btn').addEventListener('click', async () => {
@@ -548,6 +601,9 @@
                         // Payment successful!
                         currentAccessToken = data.accessToken;
 
+                        // Store token in URL parameter
+                        setUrlParameter('accessToken', currentAccessToken);
+
                         // Stop polling
                         if (paymentCheckInterval) {
                             clearInterval(paymentCheckInterval);
@@ -578,23 +634,218 @@
             btn.innerHTML = '<i class="fas fa-search me-2"></i>Check Payment Status';
         }
 
-        async function testTool(toolName) {
+        async function loadMcpCapabilities() {
             if (!currentAccessToken) {
                 alert('No access token available. Please complete payment first.');
                 return;
             }
 
             const resultsDiv = document.getElementById('tool-results');
-            resultsDiv.innerHTML = '<div class="text-center"><i class="fas fa-spinner fa-spin"></i> Calling ' + toolName + '...</div>';
+            resultsDiv.innerHTML = '<div class="text-center"><i class="fas fa-spinner fa-spin"></i> Loading MCP capabilities...</div>';
 
-            let params = {};
-
-            // Set parameters based on tool
-            if (toolName === 'GetCashuMintInfo') {
-                params.mintUrl = 'https://mint.minibits.cash/Bitcoin';
-            } else if (toolName === 'GetWeather') {
-                params.city = 'Berlin';
+            try {
+                // Load tools
+                await loadTools();
+                // Load prompts
+                await loadPrompts();
+                // Load resources
+                await loadResources();
+                
+                resultsDiv.innerHTML = '<p class="text-muted text-center"><i class="fas fa-info-circle me-2"></i>MCP capabilities loaded. Click on any tool, prompt, or resource above to interact with it.</p>';
+            } catch (error) {
+                resultsDiv.innerHTML = `
+                    <h5><i class="fas fa-times-circle text-danger me-2"></i>Error Loading Capabilities</h5>
+                    <div class="alert alert-danger">
+                        ${error.message}
+                    </div>
+                `;
             }
+        }
+
+        // Helper function to parse SSE response
+        async function parseSSEResponse(response) {
+            const text = await response.text();
+            const lines = text.split('\n');
+            
+            for (const line of lines) {
+                if (line.startsWith('data: ')) {
+                    const jsonData = line.substring(6); // Remove 'data: ' prefix
+                    return JSON.parse(jsonData);
+                }
+            }
+            throw new Error('No data found in SSE response');
+        }
+
+        async function loadTools() {
+            const response = await fetch(`/paywall/mcp?accessToken=${currentAccessToken}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    jsonrpc: '2.0',
+                    id: 1,
+                    method: 'tools/list'
+                })
+            });
+
+            const data = await parseSSEResponse(response);
+            if (response.ok && data.result && data.result.tools) {
+                const toolsSection = document.getElementById('tools-section');
+                const toolsList = document.getElementById('tools-list');
+                
+                toolsList.innerHTML = '';
+                data.result.tools.forEach(tool => {
+                    const toolCard = createToolCard(tool);
+                    toolsList.appendChild(toolCard);
+                });
+                
+                toolsSection.style.display = 'block';
+            }
+        }
+
+        async function loadPrompts() {
+            const response = await fetch(`/paywall/mcp?accessToken=${currentAccessToken}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    jsonrpc: '2.0',
+                    id: 2,
+                    method: 'prompts/list'
+                })
+            });
+
+            const data = await parseSSEResponse(response);
+            if (response.ok && data.result && data.result.prompts) {
+                const promptsSection = document.getElementById('prompts-section');
+                const promptsList = document.getElementById('prompts-list');
+                
+                promptsList.innerHTML = '';
+                data.result.prompts.forEach(prompt => {
+                    const promptCard = createPromptCard(prompt);
+                    promptsList.appendChild(promptCard);
+                });
+                
+                promptsSection.style.display = 'block';
+            }
+        }
+
+        async function loadResources() {
+            const response = await fetch(`/paywall/mcp?accessToken=${currentAccessToken}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    jsonrpc: '2.0',
+                    id: 3,
+                    method: 'resources/list'
+                })
+            });
+
+            const data = await parseSSEResponse(response);
+            if (response.ok && data.result && data.result.resources) {
+                const resourcesSection = document.getElementById('resources-section');
+                const resourcesList = document.getElementById('resources-list');
+                
+                resourcesList.innerHTML = '';
+                data.result.resources.forEach(resource => {
+                    const resourceCard = createResourceCard(resource);
+                    resourcesList.appendChild(resourceCard);
+                });
+                
+                resourcesSection.style.display = 'block';
+            }
+        }
+
+        function createToolCard(tool) {
+            const card = document.createElement('div');
+            card.className = 'col-md-6 col-lg-4 mb-3';
+            
+            const icon = getToolIcon(tool.name);
+            
+            card.innerHTML = `
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h6 class="card-title">
+                            <i class="${icon} me-2"></i>${tool.name}
+                        </h6>
+                        <p class="card-text small text-muted">${tool.description || 'No description available'}</p>
+                        <button class="btn btn-outline-primary btn-sm" onclick="executeTool('${tool.name}')">
+                            <i class="fas fa-play me-1"></i>Execute
+                        </button>
+                    </div>
+                </div>
+            `;
+            
+            return card;
+        }
+
+        function createPromptCard(prompt) {
+            const card = document.createElement('div');
+            card.className = 'col-md-6 col-lg-4 mb-3';
+            
+            card.innerHTML = `
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h6 class="card-title">
+                            <i class="fas fa-comment-dots me-2"></i>${prompt.name}
+                        </h6>
+                        <p class="card-text small text-muted">${prompt.description || 'No description available'}</p>
+                        <button class="btn btn-outline-success btn-sm" onclick="executePrompt('${prompt.name}')">
+                            <i class="fas fa-play me-1"></i>Execute
+                        </button>
+                    </div>
+                </div>
+            `;
+            
+            return card;
+        }
+
+        function createResourceCard(resource) {
+            const card = document.createElement('div');
+            card.className = 'col-md-6 col-lg-4 mb-3';
+            
+            card.innerHTML = `
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h6 class="card-title">
+                            <i class="fas fa-file me-2"></i>${resource.name}
+                        </h6>
+                        <p class="card-text small text-muted">${resource.description || resource.uri}</p>
+                        <button class="btn btn-outline-info btn-sm" onclick="accessResource('${resource.uri}')">
+                            <i class="fas fa-external-link-alt me-1"></i>Access
+                        </button>
+                    </div>
+                </div>
+            `;
+            
+            return card;
+        }
+
+        function getToolIcon(toolName) {
+            const iconMap = {
+                'GetCashuMintInfo': 'fas fa-info-circle',
+                'GetCashuKeysets': 'fas fa-key',
+                'CreateMintQuote': 'fas fa-receipt',
+                'GetWeather': 'fas fa-cloud',
+                'GetInspirationalQuote': 'fas fa-quote-left'
+            };
+            return iconMap[toolName] || 'fas fa-cog';
+        }
+
+        async function executeTool(toolName) {
+            if (!currentAccessToken) {
+                alert('No access token available. Please complete payment first.');
+                return;
+            }
+
+            const resultsDiv = document.getElementById('tool-results');
+            resultsDiv.innerHTML = `<div class="text-center"><i class="fas fa-spinner fa-spin"></i> Calling ${toolName}...</div>`;
+
+            let params = getDefaultParamsForTool(toolName);
 
             try {
                 const response = await fetch(`/paywall/mcp?accessToken=${currentAccessToken}`, {
@@ -613,7 +864,7 @@
                     })
                 });
 
-                const data = await response.json();
+                const data = await parseSSEResponse(response);
 
                 if (response.ok && data.result) {
                     const result = typeof data.result === 'string' ? JSON.parse(data.result) : data.result;
@@ -637,6 +888,106 @@
                     </div>
                 `;
             }
+        }
+
+        async function executePrompt(promptName) {
+            const resultsDiv = document.getElementById('tool-results');
+            resultsDiv.innerHTML = `<div class="text-center"><i class="fas fa-spinner fa-spin"></i> Executing prompt ${promptName}...</div>`;
+
+            try {
+                const response = await fetch(`/paywall/mcp?accessToken=${currentAccessToken}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        jsonrpc: '2.0',
+                        id: 4,
+                        method: 'prompts/get',
+                        params: {
+                            name: promptName,
+                            arguments: {}
+                        }
+                    })
+                });
+
+                const data = await parseSSEResponse(response);
+                if (response.ok && data.result) {
+                    resultsDiv.innerHTML = `
+                        <h5><i class="fas fa-check-circle text-success me-2"></i>Prompt: ${promptName}</h5>
+                        <div class="code-block">${JSON.stringify(data.result, null, 2)}</div>
+                    `;
+                } else {
+                    resultsDiv.innerHTML = `
+                        <h5><i class="fas fa-exclamation-triangle text-warning me-2"></i>Prompt Error</h5>
+                        <div class="alert alert-warning">
+                            ${data.error || 'Prompt execution failed'}
+                        </div>
+                    `;
+                }
+            } catch (error) {
+                resultsDiv.innerHTML = `
+                    <h5><i class="fas fa-times-circle text-danger me-2"></i>Network Error</h5>
+                    <div class="alert alert-danger">
+                        ${error.message}
+                    </div>
+                `;
+            }
+        }
+
+        async function accessResource(resourceUri) {
+            const resultsDiv = document.getElementById('tool-results');
+            resultsDiv.innerHTML = `<div class="text-center"><i class="fas fa-spinner fa-spin"></i> Accessing resource ${resourceUri}...</div>`;
+
+            try {
+                const response = await fetch(`/paywall/mcp?accessToken=${currentAccessToken}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        jsonrpc: '2.0',
+                        id: 5,
+                        method: 'resources/read',
+                        params: {
+                            uri: resourceUri
+                        }
+                    })
+                });
+
+                const data = await parseSSEResponse(response);
+                if (response.ok && data.result) {
+                    resultsDiv.innerHTML = `
+                        <h5><i class="fas fa-check-circle text-success me-2"></i>Resource: ${resourceUri}</h5>
+                        <div class="code-block">${JSON.stringify(data.result, null, 2)}</div>
+                    `;
+                } else {
+                    resultsDiv.innerHTML = `
+                        <h5><i class="fas fa-exclamation-triangle text-warning me-2"></i>Resource Error</h5>
+                        <div class="alert alert-warning">
+                            ${data.error || 'Resource access failed'}
+                        </div>
+                    `;
+                }
+            } catch (error) {
+                resultsDiv.innerHTML = `
+                    <h5><i class="fas fa-times-circle text-danger me-2"></i>Network Error</h5>
+                    <div class="alert alert-danger">
+                        ${error.message}
+                    </div>
+                `;
+            }
+        }
+
+        function getDefaultParamsForTool(toolName) {
+            const defaultParams = {
+                'GetCashuMintInfo': { mintUrl: 'https://stablenut.cashu.network' },
+                'GetCashuKeysets': { mintUrl: 'https://stablenut.cashu.network' },
+                'CreateMintQuote': { mintUrl: 'https://stablenut.cashu.network', amount: 100, unit: 'sat' },
+                'GetWeather': { city: 'Berlin' },
+                'GetInspirationalQuote': {}
+            };
+            return defaultParams[toolName] || {};
         }
 
         function startPaymentPolling() {
@@ -666,6 +1017,11 @@
             if (paymentCheckInterval) {
                 clearInterval(paymentCheckInterval);
             }
+        });
+
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            initializeFromUrl();
         });
     </script>
 </body>
