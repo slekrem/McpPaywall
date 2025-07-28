@@ -141,6 +141,16 @@ public class PaywallController : ControllerBase
     private string GetBaseUrl()
     {
         var request = HttpContext.Request;
-        return $"{request.Scheme}://{request.Host}";
+        var scheme = request.Headers.ContainsKey("X-Forwarded-Proto") 
+            ? request.Headers["X-Forwarded-Proto"].ToString()
+            : request.Scheme;
+        
+        // Force HTTPS in production
+        if (scheme == "http" && !request.Host.Host.Contains("localhost"))
+        {
+            scheme = "https";
+        }
+        
+        return $"{scheme}://{request.Host}";
     }
 }
