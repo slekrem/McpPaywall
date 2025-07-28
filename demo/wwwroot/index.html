@@ -2,32 +2,45 @@
 <html lang="en">
 
 <head>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-9T04YB2H3B"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+
+        gtag('config', 'G-9T04YB2H3B');
+    </script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    
+
     <!-- SEO Meta Tags -->
     <title>McpPaywall - Cashu eCash Lightning Paywall for MCP Servers | Privacy-First Micropayments</title>
-    <meta name="description" content="Monetize your Model Context Protocol (MCP) servers with privacy-preserving Cashu eCash payments. Lightning-fast micropayments, automatic paywall protection, ASP.NET Core middleware integration.">
-    <meta name="keywords" content="cashu ecash, lightning network paywall, mcp paywall, model context protocol, micropayments, bitcoin payments, privacy payments, asp.net core middleware, lightning payments api">
+    <meta name="description"
+        content="Monetize your Model Context Protocol (MCP) servers with privacy-preserving Cashu eCash payments. Lightning-fast micropayments, automatic paywall protection, ASP.NET Core middleware integration.">
+    <meta name="keywords"
+        content="cashu ecash, lightning network paywall, mcp paywall, model context protocol, micropayments, bitcoin payments, privacy payments, asp.net core middleware, lightning payments api">
     <meta name="author" content="McpPaywall">
     <meta name="robots" content="index, follow">
     <link rel="canonical" href="https://sup3r.cool/paywall" />
-    
+
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://sup3r.cool/paywall">
     <meta property="og:title" content="McpPaywall - Cashu eCash Lightning Paywall for MCP Servers">
-    <meta property="og:description" content="Monetize your Model Context Protocol servers with privacy-preserving Cashu eCash payments. Experience lightning-fast micropayments with automatic paywall protection.">
+    <meta property="og:description"
+        content="Monetize your Model Context Protocol servers with privacy-preserving Cashu eCash payments. Experience lightning-fast micropayments with automatic paywall protection.">
     <meta property="og:image" content="https://sup3r.cool/paywall/og-image.png">
     <meta property="og:site_name" content="McpPaywall">
-    
+
     <!-- Twitter -->
     <meta property="twitter:card" content="summary_large_image">
     <meta property="twitter:url" content="https://sup3r.cool/paywall">
     <meta property="twitter:title" content="McpPaywall - Cashu eCash Lightning Paywall for MCP Servers">
-    <meta property="twitter:description" content="Monetize your Model Context Protocol servers with privacy-preserving Cashu eCash payments. Lightning-fast micropayments with automatic protection.">
+    <meta property="twitter:description"
+        content="Monetize your Model Context Protocol servers with privacy-preserving Cashu eCash payments. Lightning-fast micropayments with automatic protection.">
     <meta property="twitter:image" content="https://sup3r.cool/paywall/twitter-card.png">
-    
+
     <!-- Additional SEO -->
     <meta name="theme-color" content="#667eea">
     <meta name="msapplication-TileColor" content="#667eea">
@@ -35,6 +48,7 @@
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+
     <style>
         .hero-section {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
@@ -128,7 +142,7 @@
             border-radius: 8px;
         }
     </style>
-    
+
     <!-- JSON-LD Structured Data -->
     <script type="application/ld+json">
     {
@@ -205,7 +219,7 @@
                 Cashu eCash Lightning Paywall for MCP Servers
             </h1>
             <p class="lead mb-5">
-                Experience privacy-preserving micropayments for Model Context Protocol servers. 
+                Experience privacy-preserving micropayments for Model Context Protocol servers.
                 Monetize your MCP tools with Lightning Network integration and Cashu eCash privacy.
                 <strong>Demo: Pay just 10 satoshis for 24-hour access.</strong>
             </p>
@@ -230,7 +244,8 @@
             <div class="row">
                 <div class="col-12 text-center mb-5">
                     <h2 class="display-5 fw-bold">Why Choose McpPaywall for Your MCP Server?</h2>
-                    <p class="lead text-muted">Privacy-first micropayments with Lightning Network and Cashu eCash integration</p>
+                    <p class="lead text-muted">Privacy-first micropayments with Lightning Network and Cashu eCash
+                        integration</p>
                 </div>
             </div>
             <div class="row g-4">
@@ -420,20 +435,24 @@
                                         <div class="row mb-4">
                                             <div class="col-12">
                                                 <h6><i class="fas fa-link me-2"></i>MCP Connection URL</h6>
-                                                <p class="text-muted small mb-2">Copy this URL to connect your AI client directly to the MCP server:</p>
+                                                <p class="text-muted small mb-2">Copy this URL to connect your AI client
+                                                    directly to the MCP server:</p>
                                                 <div class="input-group mb-2">
-                                                    <input type="text" id="mcp-connection-url" class="form-control font-monospace small" readonly>
-                                                    <button class="btn btn-outline-primary" type="button" onclick="copyMcpUrl()" id="copy-mcp-btn">
+                                                    <input type="text" id="mcp-connection-url"
+                                                        class="form-control font-monospace small" readonly>
+                                                    <button class="btn btn-outline-primary" type="button"
+                                                        onclick="copyMcpUrl()" id="copy-mcp-btn">
                                                         <i class="fas fa-copy"></i> Copy URL
                                                     </button>
                                                 </div>
                                                 <small class="text-muted">
                                                     <i class="fas fa-info-circle me-1"></i>
-                                                    Use this URL in Claude Desktop, Continue.dev, or other MCP-compatible AI clients
+                                                    Use this URL in Claude Desktop, Continue.dev, or other
+                                                    MCP-compatible AI clients
                                                 </small>
                                             </div>
                                         </div>
-                                        
+
                                         <div class="row">
                                             <div class="col-12 mb-3">
                                                 <button class="btn btn-info" onclick="loadMcpCapabilities()">
@@ -441,7 +460,7 @@
                                                 </button>
                                             </div>
                                         </div>
-                                        
+
                                         <!-- Tools Section -->
                                         <div class="row mb-4" id="tools-section" style="display: none;">
                                             <div class="col-12">
@@ -449,7 +468,7 @@
                                                 <div id="tools-list" class="row"></div>
                                             </div>
                                         </div>
-                                        
+
                                         <!-- Prompts Section -->
                                         <div class="row mb-4" id="prompts-section" style="display: none;">
                                             <div class="col-12">
@@ -457,7 +476,7 @@
                                                 <div id="prompts-list" class="row"></div>
                                             </div>
                                         </div>
-                                        
+
                                         <!-- Resources Section -->
                                         <div class="row mb-4" id="resources-section" style="display: none;">
                                             <div class="col-12">
@@ -550,16 +569,16 @@
             const urlToken = getUrlParameter('accessToken');
             if (urlToken) {
                 currentAccessToken = urlToken;
-                
+
                 // Generate MCP connection URL
                 const mcpUrl = `${window.location.origin}/paywall/mcp/sse?accessToken=${currentAccessToken}`;
                 document.getElementById('mcp-connection-url').value = mcpUrl;
-                
+
                 // Skip to step 4 - show tools are available
                 document.getElementById('step4-card').classList.add('active');
                 document.getElementById('step4-message').textContent = 'Tools available (token from URL)';
                 document.getElementById('access-tools-section').style.display = 'block';
-                
+
                 // Update step 3 to show already paid
                 document.getElementById('step3-result').className = 'payment-status status-paid';
                 document.getElementById('step3-result').style.display = 'block';
@@ -746,7 +765,7 @@
                 await loadPrompts();
                 // Load resources
                 await loadResources();
-                
+
                 resultsDiv.innerHTML = '<p class="text-muted text-center"><i class="fas fa-info-circle me-2"></i>MCP capabilities loaded. Click on any tool, prompt, or resource above to interact with it.</p>';
             } catch (error) {
                 resultsDiv.innerHTML = `
@@ -762,7 +781,7 @@
         async function parseSSEResponse(response) {
             const text = await response.text();
             const lines = text.split('\n');
-            
+
             for (const line of lines) {
                 if (line.startsWith('data: ')) {
                     const jsonData = line.substring(6); // Remove 'data: ' prefix
@@ -789,13 +808,13 @@
             if (response.ok && data.result && data.result.tools) {
                 const toolsSection = document.getElementById('tools-section');
                 const toolsList = document.getElementById('tools-list');
-                
+
                 toolsList.innerHTML = '';
                 data.result.tools.forEach(tool => {
                     const toolCard = createToolCard(tool);
                     toolsList.appendChild(toolCard);
                 });
-                
+
                 toolsSection.style.display = 'block';
             }
         }
@@ -817,13 +836,13 @@
             if (response.ok && data.result && data.result.prompts) {
                 const promptsSection = document.getElementById('prompts-section');
                 const promptsList = document.getElementById('prompts-list');
-                
+
                 promptsList.innerHTML = '';
                 data.result.prompts.forEach(prompt => {
                     const promptCard = createPromptCard(prompt);
                     promptsList.appendChild(promptCard);
                 });
-                
+
                 promptsSection.style.display = 'block';
             }
         }
@@ -845,13 +864,13 @@
             if (response.ok && data.result && data.result.resources) {
                 const resourcesSection = document.getElementById('resources-section');
                 const resourcesList = document.getElementById('resources-list');
-                
+
                 resourcesList.innerHTML = '';
                 data.result.resources.forEach(resource => {
                     const resourceCard = createResourceCard(resource);
                     resourcesList.appendChild(resourceCard);
                 });
-                
+
                 resourcesSection.style.display = 'block';
             }
         }
@@ -859,9 +878,9 @@
         function createToolCard(tool) {
             const card = document.createElement('div');
             card.className = 'col-md-6 col-lg-4 mb-3';
-            
+
             const icon = getToolIcon(tool.name);
-            
+
             card.innerHTML = `
                 <div class="card h-100">
                     <div class="card-body">
@@ -875,14 +894,14 @@
                     </div>
                 </div>
             `;
-            
+
             return card;
         }
 
         function createPromptCard(prompt) {
             const card = document.createElement('div');
             card.className = 'col-md-6 col-lg-4 mb-3';
-            
+
             card.innerHTML = `
                 <div class="card h-100">
                     <div class="card-body">
@@ -896,14 +915,14 @@
                     </div>
                 </div>
             `;
-            
+
             return card;
         }
 
         function createResourceCard(resource) {
             const card = document.createElement('div');
             card.className = 'col-md-6 col-lg-4 mb-3';
-            
+
             card.innerHTML = `
                 <div class="card h-100">
                     <div class="card-body">
@@ -917,7 +936,7 @@
                     </div>
                 </div>
             `;
-            
+
             return card;
         }
 
