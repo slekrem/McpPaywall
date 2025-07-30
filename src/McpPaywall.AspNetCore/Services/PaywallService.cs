@@ -32,7 +32,7 @@ public class PaywallService : IPaywallService
     {
         var amount = request.Amount ?? _options.DefaultAmount;
         var unit = request.Unit ?? _options.DefaultUnit;
-        var description = request.Description ?? $"MCP Server Access ({amount} {unit})";
+        var description = request.Description /*?? $"MCP Server Access ({amount} {unit})"*/;
 
         // Create invoice with payment provider
         var invoiceResult = await _paymentProvider.CreateInvoiceAsync(amount, unit, description);
@@ -212,6 +212,6 @@ public class PaywallService : IPaywallService
     private string GenerateMcpLink(string baseUrl, string accessToken)
     {
         var mcpPath = _options.McpPath.TrimStart('/');
-        return $"{baseUrl.TrimEnd('/')}/{mcpPath}/sse?accessToken={accessToken}";
+        return $"{baseUrl.TrimEnd('/')}/{mcpPath}/mcp/sse?accessToken={accessToken}";
     }
 }

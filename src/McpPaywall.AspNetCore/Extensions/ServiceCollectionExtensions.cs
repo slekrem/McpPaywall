@@ -45,7 +45,16 @@ public static class ServiceCollectionExtensions
         services.AddDbContext<PaywallDbContext>((serviceProvider, options) =>
         {
             var paywallOptions = serviceProvider.GetRequiredService<Microsoft.Extensions.Options.IOptions<McpPaywallOptions>>().Value;
-            options.UseSqlite(paywallOptions.ConnectionString);
+            
+            // Check if MySQL should be used (connection string contains "Server=")
+            if (paywallOptions.ConnectionString.Contains("Server=", StringComparison.OrdinalIgnoreCase))
+            {
+                options.UseMySql(paywallOptions.ConnectionString, new MariaDbServerVersion(new Version(10, 5, 0)));
+            }
+            else
+            {
+                options.UseSqlite(paywallOptions.ConnectionString);
+            }
         });
 
         // Add services
@@ -114,7 +123,36 @@ public static class ApplicationBuilderExtensions
             
             if (options.EnsureDatabaseCreated)
             {
-                dbContext.Database.EnsureCreated();
+                // For MySQL/MariaDB, ensure database exists first
+                if (options.ConnectionString.Contains("Server=", StringComparison.OrdinalIgnoreCase))
+                {
+                    try
+                    {
+                        // Try to create database if it doesn't exist
+                        dbContext.Database.EnsureCreated();
+                    }
+                    catch (Exception ex)
+                    {
+                        // If database creation fails, try to create the database first
+                        var connectionString = options.ConnectionString;
+                        var builder = new MySqlConnector.MySqlConnectionStringBuilder(connectionString);
+                        var databaseName = builder.Database;
+                        builder.Database = "";
+                        
+                        using var connection = new MySqlConnector.MySqlConnection(builder.ConnectionString);
+                        connection.Open();
+                        using var command = connection.CreateCommand();
+                        command.CommandText = $"CREATE DATABASE IF NOT EXISTS `{databaseName}` CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;";
+                        command.ExecuteNonQuery();
+                        
+                        // Now ensure tables are created
+                        dbContext.Database.EnsureCreated();
+                    }
+                }
+                else
+                {
+                    dbContext.Database.EnsureCreated();
+                }
             }
         }
 
