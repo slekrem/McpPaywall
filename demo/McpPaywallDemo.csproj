@@ -8,9 +8,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="DotNut" Version="1.0.5" />
     <PackageReference Include="ModelContextProtocol.AspNetCore" Version="0.3.0-preview.3" />
     <ProjectReference Include="../src/McpPaywall.AspNetCore/McpPaywall.AspNetCore.csproj" />
+    <ProjectReference Include="../DotNut/DotNut/DotNut.csproj" />
   </ItemGroup>
 
 </Project>

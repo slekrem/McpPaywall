@@ -28,7 +28,7 @@
   <ItemGroup>
     <FrameworkReference Include="Microsoft.AspNetCore.App" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="9.0.7" />
-    <PackageReference Include="DotNut" Version="1.0.5" />
+    <ProjectReference Include="../../DotNut/DotNut/DotNut.csproj" />
   </ItemGroup>
 
   <ItemGroup>
